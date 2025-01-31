@@ -1,0 +1,46 @@
+---
+import "../styles/global.css";
+const title = "AI Mastering";
+const description =
+  "AI Mastering Audio Processor. Upload your audio file and get it mastered with AI.";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+
+    <!-- Meta Tags -->
+    <meta name="description" content={description} />
+    <meta
+      name="keywords"
+      content="AI, Music, Mastering, Master, Audio, Masterized, Masterize my audio"
+    />
+    <meta name="author" content="Christians Cartaya" />
+
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <script>
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", (e) => {
+          e.preventDefault();
+          const targetId = anchor.getAttribute("href");
+          const targetElement = targetId
+            ? document.querySelector(targetId)
+            : null;
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body class="relative h-full font-sans bg-gradient-to-tl from-[#140A09]	to-[#2C211E]">
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

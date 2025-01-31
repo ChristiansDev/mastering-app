@@ -1,0 +1,53 @@
+---
+import AudioUploadForm from "./AudioUploadForm.tsx";
+---
+
+<div class="container mx-auto px-6 py-16 min-h-screen">
+    <div class="grid grid-cols-5 grid-rows-5 gap-4">
+        <div class="col-span-3 row-span-3 col-start-2 text-center">
+            <h1 class="text-8xl font-bold mb-6">
+                <span
+                    class="bg-gradient-to-t from-[#FFA03E] to-[#BE5100] bg-clip-text text-transparent"
+                    >AI Mastering</span
+                >
+            </h1>
+            <h2 class="text-3xl text-[#FF810F] mb-2">
+                The fastest free way to <span class="font-semibold">master</span> your
+                audios with <span class="font-semibold">AI!</span>
+            </h2>
+        </div>
+        <div class="col-span-3 row-span-2 col-start-2 row-start-4">
+            <AudioUploadForm client:load />
+        </div>
+
+        <!-- Rules Section -->
+        <div
+            class="col-span-3 col-start-2 row-start-6 mt-8 p-6 bg-[#2C211E] rounded-lg shadow-lg"
+        >
+            <h3 class="text-2xl font-semibold text-[#FF810F] mb-4">
+                Upload Rules
+            </h3>
+            <ul class="list-disc list-inside space-y-2 text-gray-300">
+                <li>
+                    <span class="font-medium">Supported Formats:</span> WAV, MP3,
+                    MP4
+                </li>
+                <li><span class="font-medium">Max File Size:</span> 250MB</li>
+                <li>
+                    <span class="font-medium">Max Audio Length:</span> 15 minutes
+                </li>
+                <li>
+                    <span class="font-medium">Privacy:</span> Audio is not published.
+                </li>
+                <li>
+                    <span class="font-medium">Retention:</span> Audio will be deleted
+                    in about 3 days.
+                </li>
+                <li>
+                    <span class="font-medium">Limitation:</span> One audio can be
+                    mastered at a time.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
