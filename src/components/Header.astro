@@ -1,0 +1,59 @@
+---
+import { ModeToggle } from "@/components/ModeToggle";
+---
+
+<script is:inline>
+    const getThemePreference = () => {
+        if (
+            typeof localStorage !== "undefined" &&
+            localStorage.getItem("theme")
+        ) {
+            return localStorage.getItem("theme");
+        }
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    };
+    const isDark = getThemePreference() === "dark";
+    document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+    if (typeof localStorage !== "undefined") {
+        const observer = new MutationObserver(() => {
+            const isDark = document.documentElement.classList.contains("dark");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        });
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["class"],
+        });
+    }
+</script>
+
+<header
+    class="sticky top-0 z-50 bg-transparent backdrop-blur-xl border-b border-gray-800"
+>
+    <div class="container mx-auto px-6 py-4 flex justify-center items-center">
+        <!-- Navigation Links -->
+        <nav class="flex-auto">
+            <ul class="flex space-x-6">
+                <li>
+                    <a
+                        href="#home"
+                    >
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="#uploaded-audios"
+                    >
+                        Uploaded Audios
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="">
+            <ModeToggle client:load />
+        </div>
+    </div>
+</header>

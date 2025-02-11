@@ -1,0 +1,39 @@
+---
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+---
+
+<Card className="sm:w-full md:w-8/12 mt-10 mb-16 mx-auto">
+    <CardHeader>
+        <CardTitle>Upload Rules</CardTitle>
+        <CardDescription>indications to take into account</CardDescription>
+    </CardHeader>
+    <CardContent>
+        <ul class="list-disc list-inside space-y-2">
+            <li>
+                <span class="font-medium">Supported Formats:</span> WAV, MP3, MP4
+            </li>
+            <li><span class="font-medium">Max File Size:</span> 250MB</li>
+            <li>
+                <span class="font-medium">Max Audio Length:</span> 15 minutes
+            </li>
+            <li>
+                <span class="font-medium">Privacy:</span> Audio is not published.
+            </li>
+            <li>
+                <span class="font-medium">Retention:</span> Audio will be deleted
+                in about 3 days.
+            </li>
+            <li>
+                <span class="font-medium">Limitation:</span> One audio can be mastered
+                at a time.
+            </li>
+        </ul>
+    </CardContent>
+</Card>

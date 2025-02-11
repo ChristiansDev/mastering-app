@@ -1,74 +1,59 @@
-// src/utils/aimastering.ts
+import type { Audio } from './interfaces/audio';
+import FormData from 'form-data';
+import api from './api';
 
-import FormData from "form-data";
-import axios from "axios";
-
-const API_URL = "https://api.bakuage.com:443";
-const API_KEY = import.meta.env.PUBLIC_AI_MASTERING_API_KEY;
-
-// Upload audio and get input_audio_id
+// Función para subir el audio
 export const uploadAudio = async (file: File): Promise<number> => {
     const formData = new FormData();
-    formData.append("file", file);
-    
-    const response = await axios.post<{ id: number }>(`${API_URL}/audios`, formData, {
+    formData.append('file', file);
+
+    const response = await api.post<{ id: number }>('/audios', formData, {
         headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
         },
     });
 
-    return response.data.id; // Return the input_audio_id
+    return response.data.id;
 };
 
-// Master audio using the input_audio_id
+// Función para obtener los audios
+export const getAudios = async (): Promise<Audio[]> => {
+    const response = await api.get<Audio[]>('/audios');
+    return response.data;
+}
+
+// Función para masterizar el audio
 export const masterAudio = async (
     inputAudioId: number,
     masteringOptions: Record<string, any>
 ): Promise<{ id: number }> => {
     const formData = new FormData();
-    formData.append("input_audio_id", inputAudioId);
+    formData.append('input_audio_id', inputAudioId.toString());
 
-    // Add mastering options to the form data
     Object.entries(masteringOptions).forEach(([key, value]) => {
         formData.append(key, value);
     });
 
-    const response = await axios.post<{ id: number }>(`${API_URL}/masterings`, formData, {
+    const response = await api.post<{ id: number }>('/masterings', formData, {
         headers: {
-            Authorization: `Bearer ${API_KEY}`,
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
         },
     });
 
-    return response.data; // Return mastering response
+    return response.data;
 };
 
-// Generate a download token for the mastered audio
+// Función para obtener el token de descarga
 export const getDownloadToken = async (audioId: number): Promise<string> => {
-    const response = await axios.get<{ token: string }>(
-        `${API_URL}/audios/${audioId}/download_token`,
-        {
-            headers: {
-                Authorization: `Bearer ${API_KEY}`,
-            },
-        }
-    );
-
-    return response.data.token; // Return the download token
+    const response = await api.get<{ token: string }>(`/audios/${audioId}/download_token`);
+    return response.data.token;
 };
 
-// Download the mastered audio using the token
+// Función para descargar el audio masterizado
 export const downloadMasteredAudio = async (audioId: number, token: string): Promise<Blob> => {
-    const response = await axios.get(`${API_URL}/audios/${audioId}/download`, {
-        headers: {
-            Authorization: `Bearer ${API_KEY}`,
-        },
-        params: {
-            token,
-        },
-        responseType: "blob", // To handle binary data (audio file)
+    const response = await api.get(`/audios/${audioId}/download`, {
+        params: { token },
+        responseType: 'blob',
     });
-
-    return response.data; // Return the audio file as a blob
+    return response.data;
 };
