@@ -9,6 +9,7 @@ export const uploadAudio = async (file: File): Promise<number> => {
 
     const response = await api.post<{ id: number }>('/audios', formData, {
         headers: {
+            'accept': 'application/json',
             'Content-Type': 'multipart/form-data',
         },
     });
