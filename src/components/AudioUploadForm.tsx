@@ -6,26 +6,19 @@ import {
 
 import { type Audio } from '../utils/interfaces/audio';
 import { AUDIO_SCHEMA } from "../utils/schemas/zod";
-import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 
 export default function AudioUploadForm() {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const { toast } = useToast()
-    const form = useForm<z.infer<typeof AUDIO_SCHEMA>>({
-        resolver: zodResolver(AUDIO_SCHEMA),
-        defaultValues: {
-            audio: undefined
-        }
-    })
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -44,9 +37,8 @@ export default function AudioUploadForm() {
         }
     };
 
-    const handleFileSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(form.getValues());
+    const handleFileSubmit: SubmitHandler<z.infer<typeof AUDIO_SCHEMA>> = async (data) => {
+        console.log(data);
         if (!file) return;
 
         setUploading(true);
@@ -70,7 +62,13 @@ export default function AudioUploadForm() {
         }
     };
 
-
+    const form = useForm<z.infer<typeof AUDIO_SCHEMA>>({
+        resolver: zodResolver(AUDIO_SCHEMA),
+        defaultValues: {
+            audio: undefined,
+            duration: 0
+        }
+    })
 
     return (
         <>
@@ -85,7 +83,7 @@ export default function AudioUploadForm() {
                     </div>
                 </form> */}
                 <Form {...form}>
-                    <form onSubmit={handleFileSubmit}>
+                    <form onSubmit={form.handleSubmit(handleFileSubmit)}>
                         <FormField
                             control={form.control}
                             name="audio"
@@ -95,6 +93,7 @@ export default function AudioUploadForm() {
                                     <div className="flex w-full items-center space-x-2">
                                         <FormControl>
                                             <Input
+                                                disabled={uploading}
                                                 id="audio"
                                                 type="file"
                                                 accept="audio/wav, audio/mp3, video/mp4"
@@ -108,7 +107,7 @@ export default function AudioUploadForm() {
                                                 }}
                                             />
                                         </FormControl>
-                                        <Button type="submit" disabled={uploading}>
+                                        <Button type="submit" disabled={uploading || !form.formState.isValid}>
                                             {uploading ? (
                                                 <>
                                                     <Loader2 className="animate-spin" /> uploading

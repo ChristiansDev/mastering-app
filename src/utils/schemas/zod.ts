@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-const fileSizeLimit = 250 * 1024 * 1024; // 250MB
-
 // Audio Schema
 export const AUDIO_SCHEMA = z.object({
     audio: z
