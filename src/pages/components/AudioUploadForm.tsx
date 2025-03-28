@@ -1,24 +1,21 @@
-import { type ChangeEvent, type FormEvent, useState } from "react";
-import {
-    getAudios,
-    uploadAudio,
-} from "../utils/aimastering";
-
-import { type Audio } from '../utils/interfaces/audio';
-import { AUDIO_SCHEMA } from "../utils/schemas/zod";
+import { type ChangeEvent, useState } from "react";
+import { AUDIO_SCHEMA } from "@/utils/schemas/zod";
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { z } from "zod"
+import { uploadAudio } from "@/services";
+import { useStore } from "@/stores";
 
 export default function AudioUploadForm() {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const { toast } = useToast()
+    const { setAudio } = useStore()
 
     const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -38,28 +35,24 @@ export default function AudioUploadForm() {
     };
 
     const handleFileSubmit: SubmitHandler<z.infer<typeof AUDIO_SCHEMA>> = async (data) => {
-        console.log(data);
         if (!file) return;
-
         setUploading(true);
 
-        try {
-            await uploadAudio(file);
-            await getAudios().then((data: Audio[]) => {
-                window.localStorage.setItem('audios', JSON.stringify(data));
-            });
-            toast({
-                title: "Audio is mastering now!",
-                description: "Wait for status available for get download!",
+        await uploadAudio(file)
+            .then((data) => {
+                setAudio(data)
+                toast({
+                    title: "Audio is mastering now!",
+                    description: "Wait for status available for get download!",
+                })
+            }).catch(() => {
+                toast({
+                    title: "Error",
+                    description: "",
+                })
+            }).finally(() => {
+                setUploading(false);
             })
-        } catch (err) {
-            toast({
-                title: "Error",
-                description: "",
-            })
-        } finally {
-            setUploading(false);
-        }
     };
 
     const form = useForm<z.infer<typeof AUDIO_SCHEMA>>({

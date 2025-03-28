@@ -1,16 +1,14 @@
+import { enviroments } from '@/config';
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
-const api = axios.create({
-    baseURL: 'https://api.bakuage.com:443',
+export const api = axios.create({
+    baseURL: enviroments.services.baseUrl,
 });
 
-// Agrega un interceptor para agregar la API key en los headers de cada request
 api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    // Obtén la API key almacenada en localStorage
     const token = localStorage.getItem('apiKey');
 
     if (token && config.headers) {
-        // Agrega el header Authorization
         config.headers.Authorization = `Bearer ${token}`;
     }
 
@@ -18,5 +16,3 @@ api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 }, (error) => {
     return Promise.reject(error);
 });
-
-export default api;

@@ -1,24 +1,26 @@
 ---
-import AudioUploadFormWrapper from "../components/AudioUploadWrapper.astro";
-import Layout from "../layouts/Layout.astro";
-import AudiosList from "../components/AudiosList";
-import App from "./react/App";
+import AudioUploadFormWrapper from "@/pages/components/AudioUploadWrapper.astro";
+import Layout from "@/layouts/Layout.astro";
+import AudiosList from "@/pages/components/AudiosList";
+import App from "@/App";
+import { Providers } from "@/lib/providers";
 ---
-
-<Layout>
-    <App client:only>
-        <div class="container mx-auto p-2">
-            <section id="home" class="relative">
-                <AudioUploadFormWrapper />
-            </section>
-            <section id="uploaded-audios" class="relative">
-                <h4
-                    class="text-center text-5xl font-bold"
-                >
-                    Uploaded Audios
-                </h4>
-                <AudiosList client:only />
-            </section>
-        </div>
-    </App>
-</Layout>
+<Providers client:only>
+    <Layout>
+        <App client:only>
+            <div class="container mx-auto p-2">
+                <section id="home" class="relative">
+                    <AudioUploadFormWrapper />
+                </section>
+                <section id="uploaded-audios" class="relative">
+                    <h4
+                        class="text-center text-5xl font-bold"
+                    >
+                        Uploaded Audios
+                    </h4>
+                    <AudiosList client:only />
+                </section>
+            </div>
+        </App>
+    </Layout>
+</Providers>

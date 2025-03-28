@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { enviroments } from '@/config';
 
 async function fetchApiKey(): Promise<string | null> {
     try {
-        const response = await axios.get('https://api-key-generator.christianscartaya.workers.dev/');
+        const response = await axios.get(enviroments.services.workers.generateApiKey);
         if (response.status !== 200) {
-            console.error('Error al obtener el API key:', response.statusText);
+            console.error('Error getting the api key:', response.statusText);
             return null;
         }
         const data = response.data;

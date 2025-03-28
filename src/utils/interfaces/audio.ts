@@ -1,4 +1,4 @@
-export interface Audio {
+export interface DataAudio {
     id: number,
     file_resource_id: number,
     user_id: number,
